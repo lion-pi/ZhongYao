@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI垃圾分类</title>
+    <style>
+        body { max-width: 600px; margin: 20px auto; padding: 20px; }
+        #preview { width: 300px; height: 300px; border: 2px dashed #ccc; }
+        .result { padding: 10px; margin-top: 20px; }
+        .recycle { background: #4CAF50; }  /* 可回收物 */
+        .food { background: #FFC107; }     /* 厨余垃圾 */
+        .hazard { background: #F44336; }   /* 有害垃圾 */
+        .other { background: #9E9E9E; }    /* 其他垃圾 */
+    </style>
+</head>
+<body>
+    <h1>拍照识别垃圾类别</h1>
+    <input type="file" id="uploader" accept="image/*" capture="environment">
+    <div id="preview"></div>
+    <div id="result" class="result"></div>
+    <script src="app.js"></script>
+</body>
+</html>
