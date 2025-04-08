@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body class="background-container">
+    <h1>中药材识别小助手</h1>
+    <form id="uploadForm">
+        <input type="file" id="uploader" accept="image/*" capture="environment" required>
+        <button type="submit">提交识别</button>
+    </form>
+    <div id="preview" style="width: 300px;object-fit: contain; margin-top: 10px;"></div>
+    <div id="result" class="result" style="font-size: 100px;"></div>
+
+</body>
+</html>
+<script src="server.js"></script>
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const file = document.getElementById('uploader').files[0];
+       if (!file) {
+           return;
+       }
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            document.getElementById('preview').innerHTML = 
+                `<img src="${e.target.result}" style="max-width:100%">`;
+                let res_box=document.querySelector('.result')
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+                res_box.innerHTML=""
+                const response = await fetch('http://localhost:3000/classify', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                console.log(result)
+                if(result){
+                    res_box.innerHTML=result.keyword
+                    console.log("执行了")
+                }else{
+                    res_box.innerHTML="服务器无响应"
+                    console.log("未响应")
+                }
+            } catch (error) {
+                res_box.innerHTML="服务器无响应!"
+                console.error('请求失败:', error);
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+
+</script>
+<style>
+    .background-container {
+        background-image: url('./1.jpeg');
+        background-size: cover; /* 使背景图片覆盖整个元素 */
+        background-position: center; /* 居中显示背景图片 */
+        width: 100%; /* 确保元素宽度占满其父容器 */
+        height: 100vh; /* 高度设置为视口高度，使元素占满整个屏幕（或根据需要调整） */
+        position: relative; /* 设置相对定位，以便于子元素（如<h5>）可以绝对定位 */
+}
+</style>
